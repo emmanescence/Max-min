@@ -52,67 +52,65 @@ tickers_panel_general = [
     'IRSA.BA','LEDE.BA','LONG.BA','METR.BA','MOLA.BA','MOLI.BA','MORI.BA','OEST.BA','PATA.BA','RIGO.BA','ROSE.BA','SAMI.BA','SEMI.BA'
 ]
 
-def get_max_drawdown(ticker):
+def get_ticker_info(ticker):
     try:
         data = yf.download(ticker, period='max', auto_adjust=True)
         max_price = data['Close'].max()
         latest_price = data['Close'].iloc[-1]
+        max_price_date = data['Close'].idxmax()
+        
         if max_price == 0:
-            return 0
+            return None, None, None, None, None
+
         drawdown = ((max_price - latest_price) / max_price) * 100
-        return drawdown
+        potential_rise = ((max_price - latest_price) / latest_price) * 100
+        
+        return drawdown, potential_rise, max_price, max_price_date, latest_price
     except Exception as e:
         st.error(f"Error fetching data for {ticker}: {e}")
-        return None
+        return None, None, None, None, None
 
 def display_tickers(tickers):
-    drawdowns = {}
+    results = []
     for ticker in tickers:
-        drawdown = get_max_drawdown(ticker)
+        drawdown, potential_rise, max_price, max_price_date, latest_price = get_ticker_info(ticker)
         if drawdown is not None:
-            drawdowns[ticker] = drawdown
+            results.append({
+                'Ticker': ticker,
+                'Drawdown (%)': drawdown,
+                'Potential Rise (%)': potential_rise,
+                'Max Price': max_price,
+                'Max Price Date': max_price_date,
+                'Current Price': latest_price
+            })
 
-    df = pd.DataFrame(list(drawdowns.items()), columns=['Ticker', 'Drawdown (%)'])
+    df = pd.DataFrame(results)
     df_sorted = df.sort_values(by='Drawdown (%)', ascending=False)
 
     top_10_farthest = df_sorted.head(10)
     top_10_closest = df_sorted.tail(10)
 
-    st.subheader('Top 10 tickers farthest from their historical max')
+    st.write("### Top 10 Tickers con Mayor Drawdown")
     st.dataframe(top_10_farthest)
 
-    st.subheader('Top 10 tickers closest to their historical max')
+    st.write("### Top 10 Tickers con Menor Drawdown")
     st.dataframe(top_10_closest)
 
-def search_ticker():
-    ticker = st.text_input("Enter a ticker symbol:")
-    if ticker:
-        drawdown = get_max_drawdown(ticker)
-        if drawdown is not None:
-            st.write(f"The ticker {ticker} is {drawdown:.2f}% away from its historical maximum price.")
+st.title('Información de Tickers')
+tab1, tab2, tab3 = st.tabs(["ADR", "CEDEAR", "Panel Líder", "Panel General"])
 
-def main():
-    st.title('Ticker Maximum Drawdown Finder')
-    
-    st.sidebar.header('Select a group of tickers:')
-    group = st.sidebar.selectbox(
-        'Group',
-        ['ADRs', 'CEDEARs', 'Panel Líder', 'Panel General']
-    )
+with tab1:
+    st.write("### ADRs")
+    display_tickers(tickers_adrs)
 
-    if group == 'ADRs':
-        tickers = tickers_adrs
-    elif group == 'CEDEARs':
-        tickers = tickers_cedears
-    elif group == 'Panel Líder':
-        tickers = tickers_panel_lider
-    elif group == 'Panel General':
-        tickers = tickers_panel_general
+with tab2:
+    st.write("### CEDEARs")
+    display_tickers(tickers_cedears)
 
-    display_tickers(tickers)
-    st.sidebar.subheader('Search for a ticker:')
-    search_ticker()
+with tab3:
+    st.write("### Panel Líder")
+    display_tickers(tickers_panel_lider)
 
-if __name__ == "__main__":
-    main()
-
+with tab4:
+    st.write("### Panel General")
+    display_tickers(tickers_panel_general)
