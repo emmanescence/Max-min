@@ -87,10 +87,10 @@ def display_tickers(tickers):
         df = df.hide(axis='index')  # Eliminar el índice
         return df
 
-    st.write("### Top 10 con Mayor Drawdown")
+    st.write("### Top 10 con mayor caída")
     st.write(format_table(top_10_farthest).to_html(), unsafe_allow_html=True)
 
-    st.write("### Top 10 con Menor Drawdown")
+    st.write("### Top 10 con menos caída")
     st.write(format_table(top_10_closest).to_html(), unsafe_allow_html=True)
 
 # Interfaz principal
