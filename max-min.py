@@ -21,7 +21,7 @@ tickers_panel_general = [
 ]
 
 # Tickers con cálculos especiales
-special_tickers = {'AGRO.BA', 'LONG.BA'}
+special_tickers = {}
 
 # Función para obtener la información del ticker
 def get_ticker_info(ticker):
