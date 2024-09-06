@@ -75,7 +75,7 @@ def display_tickers(tickers):
             })
 
     df = pd.DataFrame(results)
-    df_sorted = df.sort_values('Drawdown (%)', ascending=False)
+    df_sorted = df.sort_values('Caída (%)', ascending=False)
     top_10_farthest = df_sorted.head(10)
     top_10_closest = df_sorted.tail(10)
 
