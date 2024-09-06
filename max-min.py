@@ -28,7 +28,7 @@ def get_ticker_info(ticker):
     try:
         ticker_data = yf.Ticker(ticker)
         historical_data = ticker_data.history(period='max')
-        latest_data = ticker_data.history(period='1d')['High']
+        latest_data = ticker_data.history(period='1d')['Close']
 
         if latest_data.empty:
             return None, None, None, None, None
