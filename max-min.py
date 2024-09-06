@@ -20,18 +20,33 @@ tickers_panel_general = [
     'IRSA.BA','LEDE.BA','LONG.BA','METR.BA','MOLA.BA','MOLI.BA','MORI.BA','OEST.BA','PATA.BA','RIGO.BA','ROSE.BA','SAMI.BA','SEMI.BA'
 ]
 
+# Tickers con cálculos especiales
+special_tickers = {'AGRO.BA', 'LONG.BA'}
+
 # Función para obtener la información del ticker
 def get_ticker_info(ticker):
     try:
         ticker_data = yf.Ticker(ticker)
-        max_price = ticker_data.history(period='max')['Close'].max()
+        historical_data = ticker_data.history(period='max')
         latest_data = ticker_data.history(period='1d')['Close']
-        
+
         if latest_data.empty:
             return None, None, None, None, None
 
         latest_price = latest_data.iloc[-1]
-        max_price_date = ticker_data.history(period='max')['Close'].idxmax()
+        
+        if ticker in special_tickers:
+            # Para tickers especiales, usar el máximo del año en curso
+            this_year = pd.Timestamp.now().year
+            year_data = historical_data[historical_data.index.year == this_year]
+            if year_data.empty:
+                return None, None, None, None, None
+            max_price = year_data['Close'].max()
+            max_price_date = year_data['Close'].idxmax()
+        else:
+            # Para otros tickers, usar el máximo histórico
+            max_price = historical_data['Close'].max()
+            max_price_date = historical_data['Close'].idxmax()
 
         if max_price == 0:
             return None, None, None, None, None
@@ -92,5 +107,6 @@ with tab2:
 with tab3:
     st.write("### Panel General")
     display_tickers(tickers_panel_general)
+
 
 
