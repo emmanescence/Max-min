@@ -55,8 +55,8 @@ tickers_panel_general = [
 def get_max_drawdown(ticker):
     try:
         data = yf.download(ticker, period='max', auto_adjust=True)
-        max_price = data['Adj Close'].max()
-        latest_price = data['Adj Close'].iloc[-1]
+        max_price = data['Close'].max()
+        latest_price = data['Close'].iloc[-1]
         if max_price == 0:
             return 0
         drawdown = ((max_price - latest_price) / max_price) * 100
