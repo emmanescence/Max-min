@@ -81,7 +81,7 @@ def display_tickers(tickers):
 
     # Formateo de la tabla
     def format_table(df):
-        df = df.style.format("{:.1f}", subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
+        df = df.style.format("{:.1f}", subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price', 'Max Price Date'])
         df = df.set_properties(**{'text-align': 'center'}, subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
         df = df.set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}])  # Centrar títulos
         df = df.hide(axis='index')  # Eliminar el índice
