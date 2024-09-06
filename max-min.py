@@ -52,24 +52,26 @@ tickers_panel_general = [
     'IRSA.BA','LEDE.BA','LONG.BA','METR.BA','MOLA.BA','MOLI.BA','MORI.BA','OEST.BA','PATA.BA','RIGO.BA','ROSE.BA','SAMI.BA','SEMI.BA'
 ]
 
+# Función para obtener la información del ticker
 def get_ticker_info(ticker):
     try:
         data = yf.download(ticker, period='max', auto_adjust=True)
         max_price = data['Close'].max()
         latest_price = data['Close'].iloc[-1]
         max_price_date = data['Close'].idxmax()
-        
+
         if max_price == 0:
             return None, None, None, None, None
 
         drawdown = ((max_price - latest_price) / max_price) * 100
         potential_rise = ((max_price - latest_price) / latest_price) * 100
-        
+
         return drawdown, potential_rise, max_price, max_price_date, latest_price
     except Exception as e:
         st.error(f"Error fetching data for {ticker}: {e}")
         return None, None, None, None, None
 
+# Función para mostrar los tickers
 def display_tickers(tickers):
     results = []
     for ticker in tickers:
@@ -85,8 +87,7 @@ def display_tickers(tickers):
             })
 
     df = pd.DataFrame(results)
-    df_sorted = df.sort_values(by='Drawdown (%)', ascending=False)
-
+    df_sorted = df.sort_values('Drawdown (%)', ascending=False)
     top_10_farthest = df_sorted.head(10)
     top_10_closest = df_sorted.tail(10)
 
@@ -96,8 +97,9 @@ def display_tickers(tickers):
     st.write("### Top 10 Tickers con Menor Drawdown")
     st.dataframe(top_10_closest)
 
+# Interfaz principal
 st.title('Información de Tickers')
-tab1, tab2, tab3 = st.tabs(["ADR", "CEDEAR", "Panel Líder", "Panel General"])
+tab1, tab2, tab3, tab4 = st.tabs(["ADR", "CEDEAR", "Panel Líder", "Panel General"])
 
 with tab1:
     st.write("### ADRs")
