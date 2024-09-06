@@ -70,7 +70,7 @@ def display_tickers(tickers):
                 'Drawdown (%)': drawdown,  # Mantén un solo decimal
                 'Potential Rise (%)': potential_rise,
                 'Max Price': max_price,
-                'Max Price Date': max_price_date,
+                'Max Price Date': max_price_date.strftime('%d-%m-%Y'),  # Formateo de la fecha
                 'Current Price': latest_price
             })
 
@@ -83,6 +83,7 @@ def display_tickers(tickers):
     def format_table(df):
         df = df.style.format("{:.1f}", subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
         df = df.set_properties(**{'text-align': 'center'}, subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
+        df = df.set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}])  # Centrar títulos
         df = df.hide(axis='index')  # Eliminar el índice
         return df
 
@@ -107,6 +108,3 @@ with tab2:
 with tab3:
     st.write("### Panel General")
     display_tickers(tickers_panel_general)
-
-
-
