@@ -28,7 +28,7 @@ def get_ticker_info(ticker):
     try:
         ticker_data = yf.Ticker(ticker)
         historical_data = ticker_data.history(period='max')
-        latest_data = ticker_data.history(period='1d')['Close']
+        latest_data = ticker_data.history(period='1d')['High']
 
         if latest_data.empty:
             return None, None, None, None, None
@@ -41,12 +41,12 @@ def get_ticker_info(ticker):
             year_data = historical_data[historical_data.index.year == this_year]
             if year_data.empty:
                 return None, None, None, None, None
-            max_price = year_data['Close'].max()
-            max_price_date = year_data['Close'].idxmax()
+            max_price = year_data['High'].max()
+            max_price_date = year_data['High'].idxmax()
         else:
             # Para otros tickers, usar el máximo histórico
-            max_price = historical_data['Close'].max()
-            max_price_date = historical_data['Close'].idxmax()
+            max_price = historical_data['High'].max()
+            max_price_date = historical_data['High'].idxmax()
 
         if max_price == 0:
             return None, None, None, None, None
