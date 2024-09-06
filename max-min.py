@@ -36,7 +36,7 @@ def get_ticker_info(ticker):
         if max_price == 0:
             return None, None, None, None, None
 
-        # No conversion is needed, we will assume the values are correct as is
+        # Aseguramos que se está usando el separador correcto
         drawdown = ((max_price - latest_price) / max_price) * 100
         potential_rise = ((max_price - latest_price) / latest_price) * 100
 
@@ -53,8 +53,8 @@ def display_tickers(tickers):
         if drawdown is not None:
             results.append({
                 'Ticker': ticker,
-                'Drawdown (%)': drawdown,
-                'Potential Rise (%)': potential_rise,
+                'Drawdown (%)': f"{drawdown:.2f}",  # Se asegura que los porcentajes se formateen con 2 decimales
+                'Potential Rise (%)': f"{potential_rise:.2f}",
                 'Max Price': max_price,
                 'Max Price Date': max_price_date,
                 'Current Price': latest_price
