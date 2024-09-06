@@ -94,7 +94,7 @@ def display_tickers(tickers):
     st.write(format_table(top_10_closest).to_html(), unsafe_allow_html=True)
 
 # Interfaz principal
-st.title('Información de Tickers')
+st.title('Precios máximos históricos y actuales')
 tab1, tab2, tab3 = st.tabs(["ADR", "Panel Líder", "Panel General"])
 
 with tab1:
