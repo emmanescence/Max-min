@@ -36,7 +36,6 @@ def get_ticker_info(ticker):
         if max_price == 0:
             return None, None, None, None, None
 
-        # Aseguramos que se está usando el separador correcto
         drawdown = round(((max_price - latest_price) / max_price) * 100, 1)
         potential_rise = round(((max_price - latest_price) / latest_price) * 100, 1)
 
@@ -73,10 +72,10 @@ def display_tickers(tickers):
         return df
 
     st.write("### Top 10 con Mayor Drawdown")
-    st.dataframe(format_table(top_10_farthest))
+    st.write(format_table(top_10_farthest).to_html(), unsafe_allow_html=True)
 
     st.write("### Top 10 con Menor Drawdown")
-    st.dataframe(format_table(top_10_closest))
+    st.write(format_table(top_10_closest).to_html(), unsafe_allow_html=True)
 
 # Interfaz principal
 st.title('Información de Tickers')
