@@ -36,6 +36,10 @@ def get_ticker_info(ticker):
         if max_price == 0:
             return None, None, None, None, None
 
+        # Asegura que los precios sean tratados como float con puntos decimales
+        max_price = float(str(max_price).replace(",", ""))
+        latest_price = float(str(latest_price).replace(",", ""))
+
         drawdown = ((max_price - latest_price) / max_price) * 100
         potential_rise = ((max_price - latest_price) / latest_price) * 100
 
@@ -85,3 +89,4 @@ with tab2:
 with tab3:
     st.write("### Panel General")
     display_tickers(tickers_panel_general)
+
