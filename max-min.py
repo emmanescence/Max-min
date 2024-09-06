@@ -36,10 +36,7 @@ def get_ticker_info(ticker):
         if max_price == 0:
             return None, None, None, None, None
 
-        # Asegura que los precios sean tratados como float con puntos decimales
-        max_price = float(str(max_price).replace(",", ""))
-        latest_price = float(str(latest_price).replace(",", ""))
-
+        # No conversion is needed, we will assume the values are correct as is
         drawdown = ((max_price - latest_price) / max_price) * 100
         potential_rise = ((max_price - latest_price) / latest_price) * 100
 
