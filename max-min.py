@@ -37,8 +37,8 @@ def get_ticker_info(ticker):
             return None, None, None, None, None
 
         # Aseguramos que se está usando el separador correcto
-        drawdown = ((max_price - latest_price) / max_price) * 100
-        potential_rise = ((max_price - latest_price) / latest_price) * 100
+        drawdown = round(((max_price - latest_price) / max_price) * 100, 1)
+        potential_rise = round(((max_price - latest_price) / latest_price) * 100, 1)
 
         return drawdown, potential_rise, max_price, max_price_date, latest_price
     except Exception as e:
@@ -53,8 +53,8 @@ def display_tickers(tickers):
         if drawdown is not None:
             results.append({
                 'Ticker': ticker,
-                'Drawdown (%)': f"{drawdown:.2f}",  # Se asegura que los porcentajes se formateen con 2 decimales
-                'Potential Rise (%)': f"{potential_rise:.2f}",
+                'Drawdown (%)': drawdown,  # Mantén un solo decimal
+                'Potential Rise (%)': potential_rise,
                 'Max Price': max_price,
                 'Max Price Date': max_price_date,
                 'Current Price': latest_price
@@ -65,11 +65,18 @@ def display_tickers(tickers):
     top_10_farthest = df_sorted.head(10)
     top_10_closest = df_sorted.tail(10)
 
+    # Formateo de la tabla
+    def format_table(df):
+        df = df.style.format("{:.1f}", subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
+        df = df.set_properties(**{'text-align': 'center'}, subset=['Drawdown (%)', 'Potential Rise (%)', 'Max Price', 'Current Price'])
+        df = df.hide(axis='index')  # Eliminar el índice
+        return df
+
     st.write("### Top 10 con Mayor Drawdown")
-    st.dataframe(top_10_farthest)
+    st.dataframe(format_table(top_10_farthest))
 
     st.write("### Top 10 con Menor Drawdown")
-    st.dataframe(top_10_closest)
+    st.dataframe(format_table(top_10_closest))
 
 # Interfaz principal
 st.title('Información de Tickers')
@@ -86,4 +93,5 @@ with tab2:
 with tab3:
     st.write("### Panel General")
     display_tickers(tickers_panel_general)
+
 
