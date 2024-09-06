@@ -8,6 +8,9 @@ tickers_adrs = [
     'TGS', 'YPF', 'MELI', 'DESP', 'GLOB', 'BIOX', 'ARCO', 'TX', 'TS', 'AGRO'
 ]
 
+tickers_cedears = [
+    'SHPW', 'AABA'
+]
 
 
 tickers_panel_lider = [
