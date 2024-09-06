@@ -28,12 +28,12 @@ def get_ticker_info(ticker):
     try:
         ticker_data = yf.Ticker(ticker)
         historical_data = ticker_data.history(period='max')
-        latest_data = ticker_data.history(period='1d')['Close']
+        latest_data = ticker_data.history(period='5d')['Close']  # Últimos 5 días
 
         if latest_data.empty:
             return None, None, None, None, None
 
-        latest_price = latest_data.iloc[-1]
+        latest_price = latest_data.iloc[-1]  # Último cierre disponible
         
         if ticker in special_tickers:
             # Para tickers especiales, usar el máximo del año en curso
