@@ -69,7 +69,7 @@ def display_tickers(tickers):
         if drawdown is not None:
             results.append({
                 'Ticker': ticker,
-                'Caída (%)': drawdown,  # Mantén un solo decimal
+                'Caída respecto a máx (%)': drawdown,  # Mantén un solo decimal
                 'Suba potencial (%)': potential_rise,
                 'Precio máx.': max_price,
                 'Fecha': max_price_date.strftime('%d-%m-%Y'),  # Formateo de la fecha
@@ -77,14 +77,14 @@ def display_tickers(tickers):
             })
 
     df = pd.DataFrame(results)
-    df_sorted = df.sort_values('Caída (%)', ascending=False)
+    df_sorted = df.sort_values('Caída respecto a máx (%)', ascending=False)
     top_10_farthest = df_sorted.head(10)
     top_10_closest = df_sorted.tail(10)
 
     # Formateo de la tabla
     def format_table(df):
-        df = df.style.format("{:.1f}", subset=['Caída (%)', 'Suba potencial (%)', 'Precio máx.', 'Precio actual'])
-        df = df.set_properties(**{'text-align': 'center'}, subset=['Caída (%)', 'Suba potencial (%)', 'Precio máx.', 'Precio actual'])
+        df = df.style.format("{:.1f}", subset=['Caída respecto a máx (%)', 'Suba potencial (%)', 'Precio máx.', 'Precio actual'])
+        df = df.set_properties(**{'text-align': 'center'}, subset=['Caída respecto a máx (%)', 'Suba potencial (%)', 'Precio máx.', 'Precio actual'])
         df = df.set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}])  # Centrar títulos
         df = df.hide(axis='index')  # Eliminar el índice
         return df
